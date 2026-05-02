@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospital Management | Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+  :root {
+    --navy: #2C3E6B;
+    --teal: #3DBE91;
+    --cyan: #2C8DBE;
+    --white: #ffffff;
+    --off-white: #F8F9FC;
+    --border: #E8ECF4;
+    --text-primary: #1A2340;
+    --text-secondary: #5A6480;
+    --red: #E94E4E;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--off-white);
+    color: var(--text-primary);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  /* ── LOGIN ── */
+  #loginScreen {
+    display: flex; align-items: center; justify-content: center;
+    height: 100vh; background: linear-gradient(135deg, var(--navy), var(--cyan));
+  }
+  .login-card {
+    background: var(--white);
+    padding: 3rem; border-radius: 24px;
+    width: 100%; max-width: 420px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+    text-align: center;
+  }
+  .login-card h1 { font-family: 'Playfair Display', serif; color: var(--navy); margin-bottom: 0.5rem; font-size: 2rem; }
+  .login-card p { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 2rem; }
+  .login-card input {
+    width: 100%; padding: 1rem; margin-bottom: 1.25rem;
+    background: var(--off-white); border: 1.5px solid var(--border);
+    border-radius: 14px; font-size: 1rem; outline: none; transition: 0.3s;
+  }
+  .login-card input:focus { border-color: var(--cyan); background: white; }
+  .login-card button {
+    width: 100%; padding: 1rem; background: var(--navy);
+    color: white; border: none; border-radius: 14px;
+    font-weight: 700; cursor: pointer; transition: 0.3s;
+  }
+  .login-card button:hover { background: var(--cyan); transform: translateY(-2px); }
+
+  /* ── DASHBOARD LAYOUT ── */
+  #dashboard { display: none; padding-bottom: 4rem; }
+  
+  .top-bar {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .top-bar-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .brand { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--navy); }
+  
+  .main-content { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+  
+  /* ── HEADER ── */
+  .header-section { margin-bottom: 2.5rem; display: flex; justify-content: space-between; align-items: flex-end; }
+  .header-title h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--navy); margin-bottom: 0.25rem; }
+  .header-title p { color: var(--text-secondary); font-size: 0.95rem; }
+  
+  .btn-group { display: flex; gap: 10px; }
+  .btn { 
+    padding: 0.6rem 1.25rem; border-radius: 50px; border: 1.5px solid var(--border);
+    font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.3s;
+    background: var(--white); color: var(--text-secondary); display: flex; align-items: center; gap: 8px;
+  }
+  .btn:hover { border-color: var(--navy); color: var(--navy); }
+  .btn-primary { background: var(--navy); color: white; border-color: var(--navy); }
+  .btn-primary:hover { background: var(--cyan); border-color: var(--cyan); color: white; }
+
+  /* ── STATS ── */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
+  .stat-card { background: var(--white); padding: 1.5rem; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+  .stat-card h4 { color: var(--text-secondary); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.75rem; font-weight: 700; }
+  .stat-card .val { font-size: 2rem; font-weight: 700; color: var(--navy); }
+  .stat-card .trend { font-size: 0.75rem; margin-top: 0.5rem; display: flex; align-items: center; gap: 4px; }
+  .trend.up { color: var(--teal); }
+
+  /* ── TOOLBAR ── */
+  .toolbar {
+    background: var(--white); padding: 1.25rem; border-radius: 20px; border: 1px solid var(--border);
+    display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center;
+  }
+  .search-wrap { flex: 1; min-width: 280px; position: relative; }
+  .search-wrap i { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary); }
+  .search-wrap input { 
+    width: 100%; padding: 0.8rem 1rem 0.8rem 2.8rem; border: 1.5px solid var(--border); 
+    border-radius: 12px; outline: none; font-family: inherit; font-size: 0.95rem; transition: 0.3s;
+  }
+  .search-wrap input:focus { border-color: var(--cyan); box-shadow: 0 0 0 4px rgba(44,141,190,0.05); }
+  
+  .filter-group { display: flex; gap: 0.75rem; }
+  .select-input { 
+    padding: 0.8rem 1rem; border: 1.5px solid var(--border); border-radius: 12px;
+    font-size: 0.9rem; font-weight: 600; color: var(--navy); outline: none; cursor: pointer;
+  }
+
+  /* ── TABLE ── */
+  .table-outer { background: var(--white); border-radius: 20px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 900px; }
+  th { text-align: left; padding: 1.25rem 1.5rem; font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid var(--border); background: var(--off-white); }
+  td { padding: 1.25rem 1.5rem; font-size: 0.95rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover { background: #fcfdfe; }
+
+  .patient-cell { display: flex; flex-direction: column; gap: 2px; }
+  .patient-name { font-weight: 700; color: var(--navy); }
+  .patient-meta { font-size: 0.8rem; color: var(--text-secondary); }
+  
+  .doctor-badge { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.9rem; }
+  
+  .status-tag { padding: 0.35rem 0.8rem; border-radius: 50px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+  .status-tag.confirmed { background: rgba(61,190,145,0.1); color: #1e9b70; border: 1px solid rgba(61,190,145,0.2); }
+
+  .actions-cell { display: flex; gap: 8px; }
+  .icon-btn { 
+    width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center; text-decoration: none;
+    font-size: 1rem; transition: 0.3s; cursor: pointer; background: white;
+  }
+  .icon-btn.wa { color: #25D366; }
+  .icon-btn.wa:hover { background: #25D366; color: white; border-color: transparent; }
+  .icon-btn.del { color: var(--red); }
+  .icon-btn.del:hover { background: var(--red); color: white; border-color: transparent; }
+
+  .loader { text-align: center; padding: 5rem; color: var(--text-secondary); font-weight: 500; }
+
+  @media (max-width: 768px) {
+    .header-section { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+    .toolbar { flex-direction: column; align-items: stretch; }
+    .filter-group { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div id="loginScreen">
+  <div class="login-card">
+    <h1>Sushruta Admin</h1>
+    <p>Secure management portal</p>
+    <input type="password" id="adminPass" placeholder="Enter Access Code" onkeypress="if(event.key==='Enter') login()">
+    <button onclick="login()">Login to Dashboard</button>
+    <p id="loginError" style="color:var(--red); margin-top:1rem; display:none;">❌ Invalid credentials</p>
+  </div>
+</div>
+
+<div id="dashboard">
+  <nav class="top-bar">
+    <div class="top-bar-inner">
+      <div class="brand">Sushruta Admin</div>
+      <div class="btn-group">
+        <button class="btn" onclick="exportCSV()"><i class="fas fa-download"></i> Export Data</button>
+        <button class="btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <section class="header-section">
+      <div class="header-title">
+        <h2>Appointment Dashboard</h2>
+        <p>Overview and management of hospital patient bookings</p>
+      </div>
+      <div class="header-info">
+        <span id="currentTime" style="font-weight:600; color:var(--text-secondary);"></span>
+      </div>
+    </section>
+
+    <section class="stats-grid">
+      <div class="stat-card">
+        <h4>Total Bookings</h4>
+        <div class="val" id="stat-total">0</div>
+        <div class="trend up"><i class="fas fa-calendar-check"></i> Lifetime entries</div>
+      </div>
+      <div class="stat-card">
+        <h4>Today's New</h4>
+        <div class="val" id="stat-today">0</div>
+        <div class="trend up"><i class="fas fa-plus-circle"></i> Added today</div>
+      </div>
+      <div class="stat-card">
+        <h4>Dr. Vamsi (Surgery)</h4>
+        <div class="val" id="stat-vamsi">0</div>
+        <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:0.5rem;">Surgical consults</div>
+      </div>
+      <div class="stat-card">
+        <h4>Dr. Sangeeta (OBG)</h4>
+        <div class="val" id="stat-sangeeta">0</div>
+        <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:0.5rem;">Maternity consults</div>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <div class="search-wrap">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search by name, ID or phone number..." oninput="filterData()">
+      </div>
+      <div class="filter-group">
+        <select class="select-input" id="doctorFilter" onchange="filterData()">
+          <option value="all">All Doctors</option>
+          <option value="Vamsi">Dr. Vamsi Krishna</option>
+          <option value="Sangeeta">Dr. Sai Sangeeta</option>
+        </select>
+        <select class="select-input" id="sessionFilter" onchange="filterData()">
+          <option value="all">All Sessions</option>
+          <option value="Morning">Morning OPD</option>
+          <option value="Evening">Evening OPD</option>
+        </select>
+      </div>
+    </section>
+
+    <div class="table-outer">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Appt Date</th>
+              <th>Patient Information</th>
+              <th>Assigned Doctor</th>
+              <th>Time Slot</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="apptList">
+            <!-- Dynamic Rows -->
+          </tbody>
+        </table>
+        <div id="loader" class="loader">
+          <i class="fas fa-spinner fa-spin" style="font-size:2rem; margin-bottom:1rem; display:block;"></i>
+          Loading medical records...
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://axlnmiadyqmtuudatyta.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4bG5taWFkeXFtdHV1ZGF0eXRhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTU0MzIsImV4cCI6MjA5MzI5MTQzMn0.78OGjLebIa_EfdDsJxTKkGYIi7rkYchDD-MuIElXQl4';
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+
+
+  const ADMIN_PASS = 'admin123';
+  let allData = [];
+
+  // Set time
+  setInterval(() => {
+    document.getElementById('currentTime').textContent = new Date().toLocaleString('en-IN', { hour:'2-digit', minute:'2-digit', second:'2-digit', day:'numeric', month:'short' });
+  }, 1000);
+
+  function login() {
+    const pass = document.getElementById('adminPass').value;
+    if (pass === ADMIN_PASS) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      loadData();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+    }
+  }
+
+  function logout() { location.reload(); }
+
+  async function loadData() {
+    try {
+      const { data, error } = await supabaseClient
+        .from('appointments')
+        .select('*')
+        .order('appointment_date', { ascending: false });
+
+      if (error) throw error;
+      allData = data;
+      filterData();
+    } catch (err) {
+      console.error(err);
+      alert('Database Error: ' + (err.message || 'Could not connect to Supabase. Please check your internet or database permissions.'));
+    } finally {
+
+      document.getElementById('loader').style.display = 'none';
+    }
+  }
+
+  function filterData() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const doc = document.getElementById('doctorFilter').value;
+    const session = document.getElementById('sessionFilter').value;
+
+    const filtered = allData.filter(item => {
+      const matchesSearch = (item.patient_name || '').toLowerCase().includes(search) || 
+                            (item.phone || '').includes(search) || 
+                            String(item.id || '').includes(search);
+      const matchesDoc = doc === 'all' || (item.doctor || '').includes(doc);
+      const matchesSession = session === 'all' || (item.session || '').includes(session);
+      return matchesSearch && matchesDoc && matchesSession;
+    });
+
+
+    renderTable(filtered);
+    updateStats(filtered);
+  }
+
+  function renderTable(data) {
+    const list = document.getElementById('apptList');
+    if (data.length === 0) {
+      list.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:3rem; color:var(--text-secondary);">No patient records found matching your filters.</td></tr>`;
+      return;
+    }
+
+    list.innerHTML = data.map(item => {
+      const cleanPhone = item.phone.replace(/\s/g,'').replace('+91','');
+      const waLink = `https://wa.me/91${cleanPhone}?text=Hello%20${encodeURIComponent(item.patient_name)},%20this%20is%20Sushruta%20Hospital.%20Your%20appointment%20with%20${encodeURIComponent(item.doctor.split('—')[0])}%20is%20confirmed%20for%20${item.appointment_date}.%20Please%20arrive%2015%20mins%20early.`;
+
+      return `
+        <tr>
+          <td>
+            <div style="font-weight:700; color:var(--navy);">${item.appointment_date}</div>
+            <div style="font-size:0.7rem; color:var(--text-secondary);">Ref: ${String(item.id || '').slice(0,8).toUpperCase()}</div>
+          </td>
+
+          <td>
+            <div class="patient-cell">
+              <span class="patient-name">${item.patient_name}</span>
+              <span class="patient-meta">${item.age_gender || 'General Consultation'}</span>
+              <span style="font-size:0.85rem; color:var(--cyan); font-weight:600; margin-top:2px;">📞 ${item.phone}</span>
+            </div>
+          </td>
+          <td>
+            <div class="doctor-badge">
+              <i class="fas fa-user-md" style="color:var(--cyan);"></i>
+              ${item.doctor.split('—')[0]}
+            </div>
+          </td>
+          <td style="font-weight:500;">${item.session}</td>
+          <td><span class="status-tag confirmed">Confirmed</span></td>
+          <td>
+            <div class="actions-cell">
+              <a href="${waLink}" target="_blank" class="icon-btn wa" title="Message Patient">
+                <i class="fab fa-whatsapp"></i>
+              </a>
+              <button onclick="deleteEntry('${item.id}')" class="icon-btn del" title="Delete Entry">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  async function deleteEntry(id) {
+    if (!confirm('CAUTION: Are you sure you want to permanently delete this patient record?')) return;
+    try {
+      const { error } = await supabaseClient.from('appointments').delete().eq('id', id);
+      if (error) throw error;
+      allData = allData.filter(i => i.id !== id);
+      filterData();
+    } catch (err) { alert('Action Failed: Could not delete record.'); }
+  }
+
+  function updateStats(data) {
+    const todayStr = new Date().toISOString().split('T')[0];
+    document.getElementById('stat-total').textContent = allData.length;
+    document.getElementById('stat-vamsi').textContent = allData.filter(i => i.doctor.includes('Vamsi')).length;
+    document.getElementById('stat-sangeeta').textContent = allData.filter(i => i.doctor.includes('Sangeeta')).length;
+    document.getElementById('stat-today').textContent = allData.filter(i => i.created_at && i.created_at.startsWith(todayStr)).length;
+  }
+
+  function exportCSV() {
+    if (allData.length === 0) return alert('No data to export.');
+    let csv = 'Date,Patient Name,Age/Gender,Phone,Doctor,Session\n';
+    allData.forEach(row => {
+      csv += `"${row.appointment_date}","${row.patient_name}","${row.age_gender || ''}","${row.phone}","${row.doctor}","${row.session}"\n`;
+    });
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `Sushruta_Appointments_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sushruta Hospital | Advanced Surgery & Maternity Care in Srikakulam</title>
+  <meta name="description" content="Sushruta Hospital Srikakulam - Leading multi-speciality hospital specializing in advanced surgery, maternity (OBG), and general medicine. 24/7 emergency care and expert doctors.">
+  <meta name="keywords" content="Sushruta Hospital, Hospital in Srikakulam, Dr. Vamsi Krishna Srikakulam, Dr. Sai Sangeeta Srikakulam, Surgery Srikakulam, Maternity Hospital Srikakulam, Best Hospital Srikakulam">
+  
+  <!-- Open Graph / Facebook / WhatsApp -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sushrutahospital.com/">
+  <meta property="og:title" content="Sushruta Hospital | Expert Care, Trusted Hands">
+  <meta property="og:description" content="Book appointments online for Surgery, Maternity, and General Medicine at Srikakulam's leading multi-speciality hospital.">
+  <meta property="og:image" content="https://sushrutahospital.com/images/logo.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://sushrutahospital.com/">
+  <meta property="twitter:title" content="Sushruta Hospital | Expert Care, Trusted Hands">
+  <meta property="twitter:description" content="Leading multi-speciality hospital in Srikakulam specializing in surgery and maternity care.">
+  <meta property="twitter:image" content="https://sushrutahospital.com/images/logo.png">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://sushrutahospital.com/">
+
+  <!-- JSON-LD Structured Data (Local Business & Hospital) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Hospital",
+    "name": "Sushruta Hospital",
+    "alternateName": "సుశ్రుత హాస్పిటల్",
+    "description": "Leading multi-speciality hospital in Srikakulam specializing in surgery, OBG, and general medicine.",
+    "url": "https://sushrutahospital.com",
+    "logo": "https://sushrutahospital.com/images/logo.png",
+    "image": "https://sushrutahospital.com/images/hospital-building.jpg",
+    "telephone": "+91 9347849688",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Near Rama Mahal, Potti Sriramulu St",
+      "addressLocality": "Srikakulam",
+      "addressRegion": "Andhra Pradesh",
+      "postalCode": "532001",
+      "addressCountry": "IN"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 18.2949,
+      "longitude": 83.8967
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        "opens": "00:00",
+        "closes": "23:59"
+      }
+    ],
+    "hasSpecialty": ["Surgery", "Obstetrics and Gynecology", "General Medicine"],
+    "sameAs": [
+      "https://www.facebook.com/share/1BmcpRiuU4/",
+      "https://www.instagram.com/sushruta_hospitalsrikakulam_/",
+      "https://youtube.com/@sushrutahospital-22"
+    ]
+  }
+  </script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Noto+Sans+Telugu:wght@300;400;500;600&family=Tiro+Telugu&display=swap"
+    rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+  :root {
+    --navy: #2C3E6B;
+    --red: #E94E4E;
+    --teal: #3DBE91;
+    --cyan: #2C8DBE;
+    --orange: #F26522;
+    --white: #ffffff;
+    --off-white: #F8F9FC;
+    --light-gray: #F1F3F8;
+    --border: #E8ECF4;
+    --text-primary: #1A2340;
+    --text-secondary: #5A6480;
+    --text-light: #8A93B0;
+    --font-display: 'DM Serif Display', Georgia, serif;
+    --font-body: 'Plus Jakarta Sans', sans-serif;
+    --shadow-sm: 0 2px 8px rgba(44,62,107,0.06);
+    --shadow-md: 0 8px 32px rgba(44,62,107,0.10);
+    --shadow-lg: 0 20px 60px rgba(44,62,107,0.14);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    background: var(--white);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── LANG SWITCHER ── */
+  .lang-switcher {
+    position: fixed; top: 80px; right: 1.5rem; z-index: 1000;
+    background: rgba(255,255,255,0.9); backdrop-filter: blur(8px);
+    border: 1px solid var(--border); border-radius: 50px;
+    padding: 4px; display: flex; gap: 4px; box-shadow: var(--shadow-md);
+  }
+  .lang-switcher button {
+    border: none; background: none; padding: 6px 14px; border-radius: 50px;
+    font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: 0.3s;
+    color: var(--text-secondary);
+  }
+  .lang-switcher button.active {
+    background: var(--navy); color: white;
+  }
+
+  /* ── NAV ── */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 1.25rem;
+  }
+  .nav-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo img { height: 40px; width: auto; object-fit: contain; }
+  .nav-logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+  .nav-logo-text span:first-child { font-family: var(--font-display); font-size: 1.1rem; color: var(--navy); letter-spacing: 0.5px; }
+  .nav-logo-text span:last-child { font-size: 0.65rem; color: var(--text-secondary); font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
+  .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+  .nav-links a { text-decoration: none; font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); transition: color 0.2s; }
+  .nav-links a:hover { color: var(--navy); }
+  .nav-cta {
+    background: var(--navy); color: var(--white) !important;
+    padding: 0.5rem 1.25rem; border-radius: 50px; font-size: 0.8rem !important;
+    transition: background 0.2s, transform 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--cyan) !important; transform: translateY(-1px); }
+  .nav-phone {
+    display: flex; align-items: center; gap: 6px;
+    color: var(--teal) !important; font-weight: 600 !important;
+  }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .hamburger span { display: block; width: 22px; height: 2px; background: var(--navy); border-radius: 2px; transition: all 0.3s; }
+  .mobile-menu { display: none; position: fixed; inset: 64px 0 0 0; background: var(--white); z-index: 99; padding: 1.5rem; border-top: 1px solid var(--border); flex-direction: column; gap: 0; }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { padding: 1rem 0; border-bottom: 1px solid var(--border); font-size: 1rem; font-weight: 500; color: var(--text-primary); text-decoration: none; }
+  .mobile-menu a:last-child { border-bottom: none; }
+  .mobile-menu .mob-book { margin-top: 1rem; background: var(--navy); color: var(--white) !important; text-align: center; border-radius: var(--radius-sm); padding: 0.9rem !important; }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--white);
+    padding: 3rem 1.25rem 2rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(61,190,145,0.1); color: var(--teal);
+    padding: 0.35rem 0.9rem; border-radius: 50px;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;
+    margin-bottom: 1.25rem;
+    border: 1px solid rgba(61,190,145,0.25);
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.85rem, 4.5vw, 2.75rem);
+    font-weight: 400;
+    color: var(--navy); line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+  .hero h1 em { font-style: italic; color: var(--teal); }
+  .hero-sub {
+    font-size: 0.975rem; color: var(--text-secondary);
+    margin-bottom: 1.75rem; line-height: 1.8; max-width: 440px;
+  }
+  .hero-actions { display: flex; gap: 0.875rem; flex-wrap: wrap; margin-bottom: 2rem; }
+  .btn-primary {
+    background: var(--navy); color: var(--white);
+    padding: 0.8rem 1.75rem; border-radius: 50px;
+    font-weight: 600; font-size: 0.9rem; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: all 0.25s; border: none; cursor: pointer;
+    box-shadow: 0 4px 16px rgba(44,62,107,0.25);
+  }
+  .btn-primary:hover { background: var(--cyan); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(44,62,107,0.3); }
+  .btn-outline {
+    border: 2px solid var(--border); color: var(--text-primary);
+    padding: 0.8rem 1.75rem; border-radius: 50px;
+    font-weight: 600; font-size: 0.9rem; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: all 0.25s; background: transparent; cursor: pointer;
+  }
+  .btn-outline:hover { border-color: var(--navy); color: var(--navy); }
+  .hero-stats { display: flex; gap: 1.5rem; }
+  .hero-stat strong { display: block; font-family: var(--font-display); font-size: 1.6rem; color: var(--navy); line-height: 1; }
+  .hero-stat span { font-size: 0.75rem; color: var(--text-secondary); font-weight: 500; }
+  .hero-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border);
+    position: relative; overflow: hidden;
+  }
+  .quick-book-title {
+    font-family: var(--font-display); font-size: 1.2rem; font-weight: 400; color: var(--navy);
+    margin-bottom: 0.25rem;
+  }
+  .quick-book-sub { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1.25rem; }
+  .form-row { margin-bottom: 1rem; }
+  .form-row label {
+    display: block; font-size: 0.75rem; font-weight: 600;
+    color: var(--text-secondary); margin-bottom: 0.4rem;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .form-row input, .form-row select, .form-row textarea {
+    width: 100%; padding: 0.75rem 1rem;
+    border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+    font-family: var(--font-body); font-size: 0.9rem; color: var(--text-primary);
+    background: var(--off-white); transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none; appearance: none;
+  }
+  .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
+    border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(44,141,190,0.1);
+    background: var(--white);
+  }
+  .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .btn-book {
+    width: 100%; padding: 0.9rem;
+    background: linear-gradient(135deg, var(--navy), var(--cyan));
+    color: var(--white); font-family: var(--font-body);
+    font-weight: 700; font-size: 0.95rem; border: none;
+    border-radius: var(--radius-sm); cursor: pointer;
+    transition: all 0.25s; letter-spacing: 0.5px;
+    box-shadow: 0 4px 16px rgba(44,62,107,0.3);
+  }
+  .btn-book:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(44,62,107,0.35); }
+
+  /* ── SECTIONS ── */
+  .section { padding: 4rem 1.25rem; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-header { margin-bottom: 2.5rem; }
+  .section-label { display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--teal); margin-bottom: 0.5rem; }
+  .section-title { font-family: var(--font-display); font-size: clamp(1.5rem, 3.8vw, 2.1rem); color: var(--navy); line-height: 1.25; font-weight: 400; }
+  .section-sub { font-size: 0.95rem; color: var(--text-secondary); margin-top: 0.5rem; max-width: 560px; }
+  .alt-bg { background: var(--off-white); }
+
+  /* ── SERVICES ── */
+  .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+  .service-card { background: var(--white); border-radius: var(--radius); padding: 1.5rem 1.25rem; border: 1.5px solid var(--border); transition: all 0.25s; position: relative; overflow: hidden; }
+  .service-card:hover { border-color: transparent; box-shadow: var(--shadow-md); transform: translateY(-3px); }
+  .service-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 1rem; }
+  .service-icon.teal { background: rgba(61,190,145,0.1); }
+  .service-icon.cyan { background: rgba(44,141,190,0.1); }
+  .service-icon.navy { background: rgba(44,62,107,0.08); }
+  .service-icon.red { background: rgba(233,78,78,0.1); }
+  .service-icon.orange { background: rgba(242,101,34,0.1); }
+  .service-card h3 { font-size: 0.9rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.4rem; line-height: 1.3; }
+  .service-card p { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; }
+
+  /* ── DOCTORS ── */
+  .doctors-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .doctor-card { 
+    background: var(--white); border-radius: var(--radius); border: 1.5px solid var(--border); 
+    overflow: hidden; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    box-shadow: var(--shadow-sm);
+    display: flex; flex-direction: column;
+  }
+  .doctor-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); border-color: var(--cyan); }
+  .doctor-photo-wrap { 
+    width: 100%; height: 320px;
+    overflow: hidden; position: relative; 
+    background: linear-gradient(180deg, var(--light-gray), #e8ecf4);
+    flex-shrink: 0;
+  }
+  .doctor-photo-wrap img { 
+    width: 100%; height: 100%; object-fit: cover; object-position: center top; 
+    display: block; transition: transform 0.5s;
+  }
+  .doctor-card:hover .doctor-photo-wrap img { transform: scale(1.05); }
+  .doctor-specialty-badge { 
+    position: absolute; bottom: 15px; left: 15px; 
+    background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); 
+    padding: 0.4rem 0.9rem; border-radius: 50px; 
+    font-size: 0.7rem; font-weight: 700; color: var(--navy); 
+    border: 1px solid var(--border); letter-spacing: 0.5px;
+    box-shadow: var(--shadow-sm);
+  }
+  .doctor-info { padding: 1.75rem; flex: 1; display: flex; flex-direction: column; }
+  .doctor-name { 
+    font-family: var(--font-display); font-size: 1.3rem; color: var(--navy); font-weight: 400;
+    margin-bottom: 0.3rem; 
+  }
+  .doctor-qual { 
+    font-size: 0.78rem; color: var(--cyan); font-weight: 700; 
+    letter-spacing: 0.5px; margin-bottom: 0.75rem; 
+    text-transform: uppercase;
+  }
+  .doctor-desc { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.25rem; flex: 1; }
+  .doctor-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: auto; }
+  .tag { 
+    font-size: 0.7rem; font-weight: 600; padding: 0.3rem 0.75rem; 
+    border-radius: 50px; letter-spacing: 0.3px;
+  }
+  .tag-teal { background: rgba(61,190,145,0.1); color: #1e9b70; }
+  .tag-cyan { background: rgba(44,141,190,0.1); color: var(--cyan); }
+  .tag-navy { background: rgba(44,62,107,0.08); color: var(--navy); }
+
+
+  /* ── TIMINGS ── */
+  .timings-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .timing-card { border-radius: var(--radius); padding: 1.5rem; border: 1.5px solid var(--border); background: var(--white); }
+  .time { font-size: 1.1rem; font-weight: 700; color: var(--teal); }
+  .timing-emergency { grid-column: 1 / -1; background: rgba(233,78,78,0.05); border-color: rgba(233,78,78,0.2); display: flex; align-items: center; gap: 1rem; padding: 1.25rem; }
+
+  /* ── CONTACT ── */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+  .contact-item { display: flex; gap: 1rem; align-items: flex-start; background: var(--white); padding: 1.25rem; border-radius: var(--radius); border: 1.5px solid var(--border); margin-bottom: 1rem; }
+  .map-embed { border-radius: var(--radius); overflow: hidden; border: 1.5px solid var(--border); height: 280px; }
+  .map-embed iframe { width: 100%; height: 100%; border: 0; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #111827; color: rgba(255,255,255,0.8);
+    padding: 4rem 1.25rem 2rem;
+    position: relative; border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .footer-inner { max-width: 1100px; margin: 0 auto; }
+  .footer-top { 
+    display: grid; 
+    grid-template-columns: 1.5fr 1fr 1fr 1.2fr; 
+    gap: 2.5rem; 
+    margin-bottom: 3rem;
+  }
+  .footer-brand .brand-name { 
+    font-family: var(--font-display); font-size: 1.5rem; font-weight: 400; color: var(--white); 
+    margin-bottom: 1rem; display: block;
+  }
+  .footer-brand p { font-size: 0.9rem; line-height: 1.6; color: rgba(255,255,255,0.6); }
+  .footer-col h4 { 
+    color: var(--white); font-size: 0.85rem; font-weight: 700; 
+    letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 1.5rem; 
+  }
+  .footer-col a { 
+    display: block; font-size: 0.9rem; color: rgba(255,255,255,0.6); 
+    text-decoration: none !important; margin-bottom: 0.75rem; transition: 0.3s; 
+  }
+  .footer-col a:hover { color: var(--teal); }
+  .footer-contact-item { display: flex; gap: 12px; margin-bottom: 1.25rem; align-items: flex-start; }
+  .footer-contact-item span { font-size: 1.1rem; }
+  .footer-contact-item p, .footer-contact-item a { 
+    font-size: 0.9rem; color: rgba(255,255,255,0.6); margin: 0; line-height: 1.5;
+    text-decoration: none !important;
+  }
+  .footer-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin-bottom: 1.5rem; }
+  .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-bottom p { font-size: 0.8rem; margin: 0; }
+  .footer-bottom .reg { color: rgba(255,255,255,0.4); font-size: 0.75rem; }
+  .admin-trigger { color: rgba(255,255,255,0.3); text-decoration: none; font-size: 0.75rem; }
+
+  .social-links { display: flex; gap: 12px; margin-top: 1.5rem; }
+  .social-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    color: white !important; text-decoration: none; transition: 0.3s;
+    border: 1px solid rgba(255,255,255,0.1); font-size: 1rem;
+  }
+  .social-btn:hover { transform: translateY(-3px); color: white !important; border-color: transparent; }
+  .social-btn .fa-facebook-f:hover, .social-btn:has(.fa-facebook-f):hover { background: #1877F2; }
+  .social-btn:has(.fa-instagram):hover { background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); }
+  .social-btn:has(.fa-youtube):hover { background: #FF0000; }
+  .social-btn:has(.fa-whatsapp):hover { background: #25D366; }
+
+  /* ── MODAL ── */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(26,35,64,0.5); backdrop-filter: blur(4px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 1rem; }
+  .modal-overlay.open { display: flex; }
+  .modal-box { background: var(--white); border-radius: 20px; padding: 2rem; max-width: 420px; width: 100%; text-align: center; box-shadow: var(--shadow-lg); }
+  .modal-close { background: var(--navy); color: var(--white); border: none; padding: 0.75rem 2rem; border-radius: 50px; font-weight: 600; cursor: pointer; margin-top: 1.5rem; }
+
+  /* ── TELUGU SUPPORT ── */
+  .telugu-text {
+    font-family: 'Noto Sans Telugu', 'Tiro Telugu', sans-serif !important;
+    font-size: 1.05em;
+    line-height: 1.9;
+    letter-spacing: 0;
+    word-spacing: 0.05em;
+  }
+
+  .telugu-text h1,
+  .telugu-text .hero h1 {
+    font-family: 'Noto Sans Telugu', sans-serif !important;
+    font-weight: 600;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    line-height: 1.5;
+  }
+
+  .telugu-text .section-title {
+    font-family: 'Noto Sans Telugu', sans-serif !important;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  .telugu-text .doctor-name,
+  .telugu-text .quick-book-title,
+  .telugu-text .footer-brand .brand-name {
+    font-family: 'Noto Sans Telugu', sans-serif !important;
+    font-weight: 500;
+  }
+
+  .telugu-text .hero-sub,
+  .telugu-text .section-sub,
+  .telugu-text .doctor-desc,
+  .telugu-text .service-card p {
+    font-size: 0.95em;
+    line-height: 2;
+  }
+
+  .telugu-text .tag,
+  .telugu-text .section-label,
+  .telugu-text .hero-badge {
+    font-family: 'Noto Sans Telugu', sans-serif !important;
+    font-size: 0.78em;
+    letter-spacing: 0;
+  }
+
+  .telugu-text .btn-primary,
+  .telugu-text .btn-outline,
+  .telugu-text .btn-book,
+  .telugu-text .nav-cta {
+    font-family: 'Noto Sans Telugu', sans-serif !important;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .hero-inner { grid-template-columns: 1fr; }
+    .doctors-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+
+    /* DOCTORS — horizontal card on mobile */
+    .doctor-card { flex-direction: row; align-items: stretch; height: auto; }
+    .doctor-card:hover { transform: none; box-shadow: var(--shadow-sm); }
+    .doctor-photo-wrap { width: 130px; min-width: 130px; height: auto; min-height: 180px; }
+    .doctor-info { padding: 1rem; }
+    .doctor-name { font-size: 1.05rem; }
+    .doctor-qual { font-size: 0.7rem; margin-bottom: 0.35rem; }
+    .doctor-desc { font-size: 0.78rem; line-height: 1.45; margin-bottom: 0.75rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="lang-switcher">
+  <button id="lang-en" class="active" onclick="setLanguage('en')">EN</button>
+  <button id="lang-te" onclick="setLanguage('te')">తెలుగు</button>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#home" class="nav-logo">
+      <img src="images/logo.png" alt="Logo" onerror="this.style.display='none'">
+      <div class="nav-logo-text">
+        <span data-i18n="hospital_name">Sushruta Hospital</span>
+        <span data-i18n="slogan">Srikakulam</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#services" data-i18n="nav_services">Services</a>
+      <a href="#doctors" data-i18n="nav_doctors">Doctors</a>
+      <a href="#timings" data-i18n="nav_timings">Timings</a>
+      <a href="#contact" data-i18n="nav_contact">Contact</a>
+      <a href="tel:+919063683030" class="nav-phone">📞 9063-68-3030</a>
+      <a href="#booking" class="nav-cta" data-i18n="nav_book">Book Appointment</a>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<nav class="mobile-menu" id="mobileMenu">
+  <a href="#services" onclick="toggleMenu()" data-i18n="nav_services">Our Services</a>
+  <a href="#doctors" onclick="toggleMenu()" data-i18n="nav_doctors">Our Doctors</a>
+  <a href="#timings" onclick="toggleMenu()" data-i18n="nav_timings">OPD Timings</a>
+  <a href="#contact" onclick="toggleMenu()" data-i18n="nav_contact">Contact & Location</a>
+  <a href="#booking" onclick="toggleMenu()" class="mob-book" data-i18n="nav_book">Book Appointment</a>
+</nav>
+
+<main id="home">
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge" data-i18n="slogan">Srikakulam's Advanced Care Hospital</div>
+      <h1 data-i18n="hero_title">Expert Care, Closer to Home</h1>
+      <p class="hero-sub" data-i18n="hero_desc">Advanced Laparoscopic Surgery and compassionate Gynaecology & Obstetrics — with Srikakulam's trusted specialists.</p>
+      <div class="hero-actions">
+        <a href="#booking" class="btn-primary" data-i18n="book_appointment">📅 Book Appointment</a>
+        <a href="tel:+919063683030" class="btn-outline" data-i18n="call_now">📞 Call Now</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><strong id="stat-surgeries">500+</strong><span data-i18n="stats_surgeries">Surgeries done</span></div>
+        <div class="hero-stat"><strong>2</strong><span data-i18n="stats_specialists">Super-specialists</span></div>
+        <div class="hero-stat"><strong>24/7</strong><span data-i18n="stats_emergency">Emergency care</span></div>
+      </div>
+    </div>
+    <div class="hero-right" id="booking">
+      <div class="hero-card">
+        <h2 class="quick-book-title" data-i18n="book_title">Book Appointment</h2>
+        <p class="quick-book-sub" data-i18n="book_sub">Fill the form — we'll confirm within minutes</p>
+        <form id="bookingForm" onsubmit="submitAppointment(); return false;">
+          <div class="form-row">
+            <label data-i18n="patient_name_label">Patient Name *</label>
+            <input type="text" id="patientName" placeholder="Full name" required>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-row">
+              <label data-i18n="whatsapp_num_label">WhatsApp Number *</label>
+              <input type="tel" id="patientPhone" placeholder="10-digit number" required>
+            </div>
+            <div class="form-row">
+              <label data-i18n="age_gender_label">Age & Gender</label>
+              <input type="text" id="ageGender" placeholder="e.g. 32, Female">
+            </div>
+          </div>
+          <div class="form-row">
+            <label data-i18n="select_doctor_label">Choose Doctor *</label>
+            <select id="doctorSelect" required>
+              <option value="" data-i18n="select_doctor_label">— Select Doctor —</option>
+              <option value="Dr. Potnuru Vamsi Krishna">Dr. Potnuru Vamsi Krishna — Surgery</option>
+              <option value="Dr. Sindiri Sai Sangeeta">Dr. Sindiri Sai Sangeeta — Gynaecology</option>
+            </select>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-row">
+              <label data-i18n="session_label">Session *</label>
+              <select id="sessionSelect" required>
+                <option value="" data-i18n="session_label">— Select —</option>
+                <option value="Morning OPD">Morning OPD (8 AM – 2 PM)</option>
+                <option value="Evening OPD">Evening OPD (5 PM – 8 PM)</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label data-i18n="date_label">Preferred Date *</label>
+              <input type="date" id="aptDate" required>
+            </div>
+          </div>
+          <button type="submit" class="btn-book" id="submitBtn" data-i18n="confirm_btn">Confirm Appointment →</button>
+          <div id="formError" style="color:var(--red); font-size: 0.8rem; margin-top: 0.5rem; display: none;"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section alt-bg" id="services">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label" data-i18n="medical_team">What We Treat</div>
+      <h2 class="section-title" data-i18n="our_services">Our Specialities & Services</h2>
+      <p class="section-sub" data-i18n="services_sub">From routine checkups to advanced surgical procedures — complete care under one roof.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon teal">🔬</div>
+        <h3 data-i18n="lap_surgery_title">Laparoscopic Surgery</h3>
+        <p data-i18n="lap_surgery_desc">Minimally invasive procedures — gallbladder, hernia, appendix, and more. Faster recovery.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon cyan">🤰</div>
+        <h3 data-i18n="maternity_title">Obstetrics & Delivery</h3>
+        <p data-i18n="maternity_desc">Complete antenatal care, safe normal delivery, and high-risk pregnancy management.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon navy">👶</div>
+        <h3 data-i18n="gyn_title">Gynaecology</h3>
+        <p data-i18n="gyn_desc">PCOS, fibroids, infertility evaluation, menstrual disorders, and women's health.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon red">🏥</div>
+        <h3 data-i18n="gen_surgery_title">General Surgery</h3>
+        <p data-i18n="gen_surgery_desc">Wound care, abscess drainage, minor and major surgical procedures.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon orange">🩺</div>
+        <h3 data-i18n="opd_title">OPD Consultations</h3>
+        <p data-i18n="opd_desc">Expert outpatient consultations — morning and evening slots available daily.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon teal">🚑</div>
+        <h3 data-i18n="emergency_service_title">24/7 Emergency</h3>
+        <p data-i18n="emergency_service_desc">Round-the-clock emergency care — call us any time at 9063 68 30 30.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOCTORS -->
+<section class="section" id="doctors">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label" data-i18n="medical_team">Our Team</div>
+      <h2 class="section-title" data-i18n="specialist_doctors">Meet Your Specialists</h2>
+      <p class="section-sub" data-i18n="doctors_sub">Experienced, compassionate doctors dedicated to your wellbeing.</p>
+    </div>
+    <div class="doctors-grid">
+      <article class="doctor-card">
+        <div class="doctor-photo-wrap">
+          <img src="images/dr-vamsi.png" alt="Dr. Vamsi">
+          <div class="doctor-specialty-badge">Laparoscopic Surgeon</div>
+        </div>
+        <div class="doctor-info">
+          <h3 class="doctor-name">Dr. Potnuru Vamsi Krishna</h3>
+          <div class="doctor-qual">MBBS, M.S., FMAS, FIAGES, Dip., MAS</div>
+          <p class="doctor-desc" data-i18n="dept_surgery">General & Laparoscopic Surgery</p>
+          <div class="doctor-tags">
+            <span class="tag tag-teal">Laparoscopy</span>
+            <span class="tag tag-navy">General Surgery</span>
+            <span class="tag tag-cyan">Hernia Repair</span>
+          </div>
+        </div>
+      </article>
+      <article class="doctor-card">
+        <div class="doctor-photo-wrap">
+          <img src="images/dr-sangeeta.png" alt="Dr. Sangeeta">
+          <div class="doctor-specialty-badge">Gynaecologist</div>
+        </div>
+        <div class="doctor-info">
+          <h3 class="doctor-name">Dr. Sindiri Sai Sangeeta</h3>
+          <div class="doctor-qual">MBBS, DNB(OBG)</div>
+          <p class="doctor-desc" data-i18n="dept_obg">Obstetrics & Gynaecology</p>
+          <div class="doctor-tags">
+            <span class="tag tag-teal">Obstetrics</span>
+            <span class="tag tag-navy">Gynaecology</span>
+            <span class="tag tag-cyan">Normal Delivery</span>
+          </div>
+        </div>
+      </article>
+
+
+    </div>
+  </div>
+</section>
+
+<!-- TIMINGS -->
+<section class="section alt-bg" id="timings">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-label" data-i18n="nav_timings">OPD Hours</div>
+      <h2 class="section-title" data-i18n="opd_timings">Consultation Timings</h2>
+      <p class="section-sub" data-i18n="always_available">Available 6 days a week — walk in or book an appointment online.</p>
+    </div>
+    <div class="timings-grid">
+      <div class="timing-card">
+        <h3 data-i18n="morning_opd">Morning OPD</h3>
+        <div class="time">8:00 AM – 2:00 PM</div>
+      </div>
+      <div class="timing-card">
+        <h3 data-i18n="evening_opd">Evening OPD</h3>
+        <div class="time">5:00 PM – 8:00 PM</div>
+      </div>
+      <div class="timing-card timing-emergency">
+        <span class="em-icon">🚨</span>
+        <div>
+          <h3 data-i18n="emergency">Emergency Services</h3>
+          <div data-i18n="always_available">Available 24 hours, 7 days a week</div>
+          <a href="tel:+919063683030">📞 9063 68 30 30</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact">
+  <div class="section-inner">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-item-text">
+            <h4 data-i18n="address">Address</h4>
+            <p data-i18n="address">Near Trisha Honda Showroom, Srikakulam</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-text">
+            <h4>Phone</h4>
+            <a href="tel:+919063683030">9063 68 30 30</a>
+          </div>
+        </div>
+        <a href="https://maps.google.com/?q=Sushruta+Hospital+Srikakulam" target="_blank" class="btn-primary">📍 View on Maps</a>
+      </div>
+      <div class="map-embed">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.422!2d83.8968!3d18.2948!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sSushruta+Hospital+Srikakulam!5e0!3m2!1sen!2sin!4v1" loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="brand-name" data-i18n="hospital_name">Sushruta Hospital</span>
+        <p data-i18n="footer_desc">Expert surgical and obstetric care with compassion, serving Srikakulam and surrounding districts.</p>
+        <div class="social-links">
+          <a href="https://www.facebook.com/share/1BmcpRiuU4/" target="_blank" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/sushruta_hospitalsrikakulam_/" target="_blank" class="social-btn"><i class="fab fa-instagram"></i></a>
+          <a href="https://youtube.com/@sushrutahospital-22" target="_blank" class="social-btn"><i class="fab fa-youtube"></i></a>
+          <a href="https://wa.me/919063683030" target="_blank" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-col">
+        <h4 data-i18n="quick_links">Quick Links</h4>
+        <a href="#services" data-i18n="nav_services">Our Services</a>
+        <a href="#doctors" data-i18n="nav_doctors">Our Doctors</a>
+        <a href="#timings" data-i18n="nav_timings">OPD Timings</a>
+        <a href="#contact" data-i18n="nav_contact">Contact Us</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Specialities</h4>
+        <a href="#services" data-i18n="lap_surgery_title">Laparoscopic Surgery</a>
+        <a href="#services" data-i18n="maternity_title">Maternity Care</a>
+        <a href="#services" data-i18n="gyn_title">Gynaecology</a>
+        <a href="#services" data-i18n="gen_surgery_title">General Surgery</a>
+      </div>
+
+      <div class="footer-col">
+        <h4 data-i18n="reach_us">Reach Us</h4>
+        <div class="footer-contact-item">
+          <span>📍</span>
+          <p data-i18n="address">Near Trisha Honda Showroom, Srikakulam.</p>
+        </div>
+        <div class="footer-contact-item">
+          <span>📞</span>
+          <a href="tel:+919063683030" style="font-weight:700; color:var(--white);">9063 68 30 30</a>
+        </div>
+      </div>
+    </div>
+
+    <hr class="footer-divider">
+
+    <div class="footer-bottom">
+      <p data-i18n="all_rights">© 2026 Sushruta Hospital. All rights reserved.</p>
+      <div style="display:flex; gap:20px; align-items:center;">
+        <span class="reg">సుశ్రుత హాస్పిటల్</span>
+        <a href="admin.html" class="admin-trigger">Admin Dashboard</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal-box">
+    <div style="font-size:3rem;">✅</div>
+    <h3 data-i18n="book_title">Appointment Confirmed!</h3>
+    <div id="modalDetails" style="text-align:left; margin: 1rem 0;"></div>
+    <button class="modal-close" onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<script src="js/translations.js"></script>
+<script src="js/app.js"></script>
+<script>
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+</script>
+</body>
+</html>
