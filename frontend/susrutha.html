@@ -1069,10 +1069,12 @@
 <script>
   // ── CONFIG ──
   if (!window.HOSPITAL_CONFIG) {
-    console.error("Sushruta: Configuration file (config.js) not found. If you are developing locally, ensure config.js exists. If deployed, ensure Environment Variables and Build Command are set.");
     window.HOSPITAL_CONFIG = {};
   }
-  const { SUPABASE_URL, SUPABASE_KEY, TWILIO_SID, TWILIO_AUTH, TWILIO_FROM, ADMIN_PASS } = window.HOSPITAL_CONFIG;
+  // Supabase keys are public-safe "Anon" keys, so we can use fallbacks
+  const SUPABASE_URL = window.HOSPITAL_CONFIG.SUPABASE_URL || 'https://axlnmiadyqmtuudatyta.supabase.co';
+  const SUPABASE_KEY = window.HOSPITAL_CONFIG.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4bG5taWFkeXFtdHV1ZGF0eXRhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTU0MzIsImV4cCI6MjA5MzI5MTQzMn0.78OGjLebIa_EfdDsJxTKkGYIi7rkYchDD-MuIElXQl4';
+  const { TWILIO_SID, TWILIO_AUTH, TWILIO_FROM, ADMIN_PASS } = window.HOSPITAL_CONFIG;
 
 
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);

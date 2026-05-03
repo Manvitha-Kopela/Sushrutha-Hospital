@@ -7,4 +7,4 @@ dist/
 backend/node_modules/
 backend/.env
 scratch/
-frontend/js/config.js
+scratch/
