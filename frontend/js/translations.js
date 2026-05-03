@@ -61,7 +61,22 @@ const translations = {
     address: "Near Trisha Honda Showroom, Day & Night Junction, Srikakulam.",
     footer_desc: "Sushruta Hospital provides expert surgical and obstetric care with compassion, serving the people of Srikakulam and surrounding districts.",
     quick_links: "Quick Links",
-    all_rights: "© 2026 Sushruta Hospital, Srikakulam. All rights reserved."
+    all_rights: "© 2026 Sushruta Hospital, Srikakulam. All rights reserved.",
+    nav_phone: "📞 9063-68-3030",
+    mob_services: "🏥 Our Services",
+    mob_doctors: "👨‍⚕️ Our Doctors",
+    mob_timings: "🕐 OPD Timings",
+    mob_contact: "📍 Contact & Location",
+    mob_call: "📞 Call: 9063-68-3030",
+    email_label: "Email Address *",
+    email_placeholder: "For confirmation",
+    age_placeholder: "e.g. 32, Female",
+    doctor_placeholder: "— Select Doctor —",
+    session_placeholder: "— Select —",
+    reason_placeholder: "Brief description of your concern...",
+    modal_confirmed: "Appointment Confirmed!",
+    modal_success_desc: "Your appointment has been successfully scheduled. A confirmation email and WhatsApp message will be sent to you shortly.",
+    modal_close: "Close"
   },
   te: {
     hospital_name: "సుశ్రుత హాస్పిటల్",
@@ -125,8 +140,24 @@ const translations = {
     address: "త్రిష హోండా షోరూమ్ దగ్గర, డే & నైట్ జంక్షన్, శ్రీకాకుళం.",
     footer_desc: "సుశ్రుత హాస్పిటల్ నిపుణులైన శస్త్రచికిత్స మరియు ప్రసూతి సంరక్షణను అందిస్తుంది.",
     quick_links: "ముఖ్యమైన లింకులు",
-    all_rights: "© 2026 సుశ్రుత హాస్పిటల్, శ్రీకాకుళం. అన్ని హక్కులు ప్రత్యేకించబడ్డాయి."
+    all_rights: "© 2026 సుశ్రుత హాస్పిటల్, శ్రీకాకుళం. అన్ని హక్కులు ప్రత్యేకించబడ్డాయి.",
+    nav_phone: "📞 9063-68-3030",
+    mob_services: "🏥 మా సేవలు",
+    mob_doctors: "👨‍⚕️ మా వైద్యులు",
+    mob_timings: "🕐 OPD సమయాలు",
+    mob_contact: "📍 సంప్రదించండి",
+    mob_call: "📞 కాల్ చేయండి: 9063-68-3030",
+    email_label: "ఈమెయిల్ అడ్రస్ *",
+    email_placeholder: "ధృవీకరణ కోసం",
+    age_placeholder: "ఉదా. 32, స్త్రీ",
+    doctor_placeholder: "— డాక్టరును ఎంచుకోండి —",
+    session_placeholder: "— ఎంచుకోండి —",
+    reason_placeholder: "మీ ఆరోగ్య సమస్యను క్లుప్తంగా వివరించండి...",
+    modal_confirmed: "అపాయింట్‌మెంట్ నిర్ధారించబడింది!",
+    modal_success_desc: "మీ అపాయింట్‌మెంట్ విజయవంతంగా షెడ్యూల్ చేయబడింది. త్వరలో మీకు ఈమెయిల్ మరియు వాట్సాప్ సందేశం పంపబడుతుంది.",
+    modal_close: "ముగించు"
   }
 };
 
 window.translations = translations;
+

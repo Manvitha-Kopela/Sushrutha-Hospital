@@ -26,7 +26,39 @@ document.addEventListener('DOMContentLoaded', () => {
     aptDate.min = today;
     aptDate.value = today;
   }
+
+  // Scroll Animations
+  initScrollEffects();
 });
+
+// ── SCROLL EFFECTS ─────────────────────────────────────────────
+function initScrollEffects() {
+  const nav = document.getElementById('mainNav');
+  const reveals = document.querySelectorAll('.reveal');
+
+  window.addEventListener('scroll', () => {
+    // Nav effect
+    if (window.scrollY > 50) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+
+    // Reveal effect
+    reveals.forEach(el => {
+      const windowHeight = window.innerHeight;
+      const revealTop = el.getBoundingClientRect().top;
+      const revealPoint = 150;
+
+      if (revealTop < windowHeight - revealPoint) {
+        el.classList.add('active');
+      }
+    });
+  });
+
+  // Trigger initial reveal
+  window.dispatchEvent(new Event('scroll'));
+}
 
 // ── i18n ENGINE ──────────────────────────────────────────────
 function setLanguage(lang) {
@@ -35,7 +67,9 @@ function setLanguage(lang) {
   
   // Update buttons
   document.querySelectorAll('.lang-switcher button').forEach(btn => {
-    btn.classList.toggle('active', btn.id === `lang-${lang}`);
+    const isActive = btn.id === `lang-${lang}`;
+    btn.style.background = isActive ? 'var(--accent)' : 'transparent';
+    btn.style.color = isActive ? 'white' : 'var(--text-main)';
   });
 
   // Update text elements
@@ -58,13 +92,18 @@ function setLanguage(lang) {
 
 // ── HELPERS ───────────────────────────────────────────────────
 async function apiFetch(path, options = {}) {
-  const res = await fetch(`${API_BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json', ...options.headers },
-    ...options
-  });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Server error');
-  return data;
+  try {
+    const res = await fetch(`${API_BASE}${path}`, {
+      headers: { 'Content-Type': 'application/json', ...options.headers },
+      ...options
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Server error');
+    return data;
+  } catch (err) {
+    console.error('API Fetch error:', err);
+    throw err;
+  }
 }
 
 async function supabasePost(table, body) {
@@ -86,6 +125,7 @@ async function supabasePost(table, body) {
 async function submitAppointment() {
   const name = document.getElementById('patientName').value.trim();
   const phone = document.getElementById('patientPhone').value.trim();
+  const email = document.getElementById('patientEmail').value.trim();
   const doctor = document.getElementById('doctorSelect').value;
   const session = document.getElementById('sessionSelect').value;
   const date = document.getElementById('aptDate').value;
@@ -93,7 +133,7 @@ async function submitAppointment() {
   const errEl = document.getElementById('formError');
   errEl.style.display = 'none';
 
-  if (!name || !phone || !doctor || !session || !date) {
+  if (!name || !phone || !email || !doctor || !session || !date) {
     errEl.textContent = currentLang === 'te' ? '⚠️ దయచేసి అన్ని వివరాలు నింపండి.' : '⚠️ Please fill all required fields.';
     errEl.style.display = 'block'; return;
   }
@@ -108,29 +148,54 @@ async function submitAppointment() {
   btn.textContent = currentLang === 'te' ? 'పంపబడుతోంది...' : 'Booking...';
 
   try {
+    // 1. Save to Supabase
+    await supabasePost('appointments', { 
+      patient_name: name, 
+      phone, 
+      email,
+      doctor, 
+      session, 
+      appointment_date: date, 
+      age_gender: age, 
+      status: 'confirmed',
+      created_at: new Date().toISOString()
+    });
+
+    // 2. Try Backend (Optional, keeping it for compatibility)
     try {
-      // Try Backend
       await apiFetch('/appointments', {
         method: 'POST',
-        body: JSON.stringify({ patient_name: name, phone, doctor, session, appointment_date: date, age_gender: age })
+        body: JSON.stringify({ patient_name: name, phone, email, doctor, session, appointment_date: date, age_gender: age })
       });
-      // Try WhatsApp Notify via Backend
       await apiFetch('/notify-whatsapp', {
         method: 'POST',
         body: JSON.stringify({ phone, name, doctor, date, session })
       });
     } catch (e) {
-      // Fallback Direct Supabase
-      await supabasePost('appointments', { 
-        patient_name: name, 
-        phone, 
-        doctor, 
-        session, 
-        appointment_date: date, 
-        age_gender: age, 
-        status: 'confirmed',
-        created_at: new Date().toISOString()
-      });
+      console.warn('Backend endpoint not reachable, but data saved to Supabase.');
+    }
+
+    // 3. Send Email via EmailJS
+    try {
+        console.log("Attempting to send email to:", email);
+        const templateParams = {
+            patient_name: name,
+            to_email: email,
+            doctor: doctor,
+            date: new Date(date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }),
+            session: session,
+            phone: phone,
+            reply_to: "sushruthahospitalsrikakulam@gmail.com"
+        };
+        
+        const response = await emailjs.send("service_irrd1pk", "template_72yr0lq", templateParams);
+        console.log("EmailJS Success:", response.status, response.text);
+    } catch (mailErr) {
+        console.error("EmailJS Error:", mailErr);
+        // Show warning in the modal but don't block success
+        document.getElementById('modalDetails').innerHTML += `
+          <p style="color: #e67e22; font-weight: 600; margin-top: 10px;">⚠️ Email Notification Failed: ${mailErr.text || mailErr.message || 'Check EmailJS configuration'}</p>
+        `;
     }
 
     // Show Success Modal
@@ -140,11 +205,12 @@ async function submitAppointment() {
       <p><strong>Doctor:</strong> ${doctor}</p>
       <p><strong>Date:</strong> ${formattedDate}</p>
       <p><strong>Session:</strong> ${session}</p>
+      <p style="color: var(--healing); font-weight: 600; margin-top: 10px;">✅ Confirmation email sent to ${email}</p>
     `;
-    document.getElementById('successModal').classList.add('open');
+    document.getElementById('successModal').style.display = 'flex';
     
     // Reset form
-    ['patientName', 'patientPhone', 'ageGender'].forEach(id => document.getElementById(id).value = '');
+    ['patientName', 'patientPhone', 'patientEmail', 'ageGender'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('doctorSelect').value = '';
     document.getElementById('sessionSelect').value = '';
   } catch (err) {
@@ -157,11 +223,12 @@ async function submitAppointment() {
 }
 
 function closeModal() {
-  document.getElementById('successModal').classList.remove('open');
+  document.getElementById('successModal').style.display = 'none';
 }
 
 // ── EXPOSE GLOBALS ───────────────────────────────────────────
 window.setLanguage = setLanguage;
 window.submitAppointment = submitAppointment;
 window.closeModal = closeModal;
-window.openAdmin = () => alert('Admin access restricted. Please login via backend/dashboard.');
+window.openAdmin = () => window.location.href = 'admin.html';
+

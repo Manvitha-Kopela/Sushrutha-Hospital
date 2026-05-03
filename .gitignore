@@ -4,3 +4,7 @@ node_modules/
 *.log
 dist/
 .cache/
+backend/node_modules/
+backend/.env
+scratch/
+frontend/js/config.js

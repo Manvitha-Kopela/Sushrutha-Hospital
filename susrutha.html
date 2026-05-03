@@ -18,8 +18,16 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Hind+Guntur:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script src="frontend/js/config.js"></script>
+<script src="frontend/js/translations.js"></script>
+<script>
+  (function() {
+    emailjs.init("aDnk2VtKJkOCl_NEL");
+  })();
+</script>
 
 <script type="application/ld+json">
 {
@@ -59,8 +67,11 @@
     --text-primary: #1A2340;
     --text-secondary: #5A6480;
     --text-light: #8A93B0;
-    --font-display: 'DM Serif Display', Georgia, serif;
-    --font-body: 'Plus Jakarta Sans', sans-serif;
+    --font-display: 'Libre Baskerville', Georgia, serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+    --font-telugu: 'Hind Guntur', sans-serif;
+    --active-body-font: 'Inter', system-ui, sans-serif;
+    --active-display-font: 'Libre Baskerville', Georgia, serif;
     --shadow-sm: 0 2px 8px rgba(44,62,107,0.06);
     --shadow-md: 0 8px 32px rgba(44,62,107,0.10);
     --shadow-lg: 0 20px 60px rgba(44,62,107,0.14);
@@ -72,7 +83,7 @@
   html { scroll-behavior: smooth; }
   
   body {
-    font-family: var(--font-body);
+    font-family: var(--active-body-font);
     color: var(--text-primary);
     background: var(--white);
     line-height: 1.6;
@@ -96,7 +107,7 @@
   .nav-logo img { height: 40px; width: auto; object-fit: contain; }
   .nav-logo-text { display: flex; flex-direction: column; line-height: 1.1; }
   .nav-logo-text span:first-child { font-family: var(--font-display); font-size: 1.1rem; color: var(--navy); letter-spacing: 0.5px; }
-  .nav-logo-text span:last-child { font-size: 0.65rem; color: var(--text-secondary); font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
+  .nav-logo-text span:last-child { font-size: 0.72rem; color: var(--text-secondary); font-weight: 500; letter-spacing: 0.3px; font-family: var(--font-telugu); text-transform: none; }
   .nav-links { display: flex; gap: 1.5rem; align-items: center; }
   .nav-links a { text-decoration: none; font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); transition: color 0.2s; }
   .nav-links a:hover { color: var(--navy); }
@@ -110,6 +121,32 @@
     display: flex; align-items: center; gap: 6px;
     color: var(--teal) !important; font-weight: 600 !important;
   }
+  .nav-lang {
+    display: flex;
+    background: #F0F2F5;
+    padding: 3px;
+    border-radius: 50px;
+    border: 1px solid var(--border);
+    margin-left: 0.5rem;
+  }
+  .nav-lang button {
+    border: none;
+    background: transparent;
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+  }
+  .nav-lang button.active {
+    background: var(--navy);
+    color: white;
+    box-shadow: 0 4px 10px rgba(44,62,107,0.2);
+  }
+  
   .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
   .hamburger span { display: block; width: 22px; height: 2px; background: var(--navy); border-radius: 2px; transition: all 0.3s; }
   .mobile-menu { display: none; position: fixed; inset: 64px 0 0 0; background: var(--white); z-index: 99; padding: 1.5rem; border-top: 1px solid var(--border); flex-direction: column; gap: 0; }
@@ -152,10 +189,11 @@
   }
   .hero-badge::before { content: '●'; font-size: 0.5rem; }
   .hero h1 {
-    font-family: var(--font-display);
-    font-size: clamp(2rem, 5vw, 3rem);
+    font-family: var(--active-display-font);
+    font-size: clamp(1.9rem, 4.5vw, 2.8rem);
     color: var(--navy); line-height: 1.15;
     margin-bottom: 1rem;
+    letter-spacing: -0.02em;
   }
   .hero h1 em { font-style: italic; color: var(--teal); }
   .hero-sub {
@@ -244,8 +282,9 @@
     margin-bottom: 0.5rem;
   }
   .section-title {
-    font-family: var(--font-display); font-size: clamp(1.6rem, 4vw, 2.2rem);
-    color: var(--navy); line-height: 1.2;
+    font-family: var(--active-display-font); font-size: clamp(1.5rem, 3.5vw, 2rem);
+    color: var(--navy); line-height: 1.25;
+    font-weight: 700; letter-spacing: -0.01em;
   }
   .section-sub { font-size: 0.95rem; color: var(--text-secondary); margin-top: 0.5rem; max-width: 560px; }
   .alt-bg { background: var(--off-white); }
@@ -660,6 +699,10 @@
       <a href="#contact">Contact</a>
       <a href="tel:+919063683030" class="nav-phone">📞 9063-68-3030</a>
       <a href="#booking" class="nav-cta">Book Appointment</a>
+      <div class="nav-lang">
+        <button id="lang-en" class="lang-btn" onclick="setLanguage('en')">EN</button>
+        <button id="lang-te" class="lang-btn" onclick="setLanguage('te')">తెలుగు</button>
+      </div>
     </div>
     <div class="hamburger" onclick="toggleMenu()" aria-label="Menu" role="button" tabindex="0">
       <span></span><span></span><span></span>
@@ -673,6 +716,10 @@
   <a href="#contact" onclick="toggleMenu()">📍 Contact & Location</a>
   <a href="tel:+919063683030" onclick="toggleMenu()">📞 Call: 9063-68-3030</a>
   <a href="#booking" onclick="toggleMenu()" class="mob-book">📅 Book Appointment</a>
+  <div class="nav-lang" style="margin: 1.5rem 0 0 0; justify-content: center; background: #f8f9fa;">
+    <button class="lang-btn" onclick="setLanguage('en')">EN</button>
+    <button class="lang-btn" onclick="setLanguage('te')">తెలుగు</button>
+  </div>
 </nav>
 
 <!-- HERO + BOOKING FORM -->
@@ -709,9 +756,13 @@
               <input type="tel" id="phone" placeholder="10-digit number" required pattern="[0-9]{10}" autocomplete="tel">
             </div>
             <div class="form-row">
-              <label for="age">Age &amp; Gender</label>
-              <input type="text" id="age" placeholder="e.g. 32, Female">
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" placeholder="For confirmation" required>
             </div>
+          </div>
+          <div class="form-row">
+            <label for="age">Age & Gender</label>
+            <input type="text" id="age" placeholder="e.g. 32, Female">
           </div>
           <div class="form-row">
             <label for="doctor">Choose Doctor *</label>
@@ -1017,16 +1068,10 @@
 
 <script>
   // ── CONFIG ──
-  const SUPABASE_URL = ''; // Removed for security
-  const SUPABASE_KEY = ''; // Removed for security
-  const TWILIO_SID   = ''; // Removed for security
-  const TWILIO_AUTH  = ''; // Removed for security
-  const TWILIO_FROM  = ''; // Removed for security
-  const CONTENT_SID  = ''; // Removed for security
-  const ADMIN_PASS   = ''; // Removed for security
+  const { SUPABASE_URL, SUPABASE_KEY, TWILIO_SID, TWILIO_AUTH, TWILIO_FROM, ADMIN_PASS } = window.HOSPITAL_CONFIG || {};
 
 
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   // Set min date to today
   const today = new Date().toISOString().split('T')[0];
@@ -1057,13 +1102,27 @@
 
     try {
       // 1. Save to Supabase
-      const { error } = await supabase.from('appointments').insert([data]);
+      const { error } = await supabaseClient.from('appointments').insert([data]);
       if (error) throw new Error('Database error: ' + error.message);
 
-      // 2. Send WhatsApp via Twilio
-      await sendWhatsApp(data);
+      // 2. Send Email via EmailJS
+      try {
+        const templateParams = {
+          patient_name: data.patient_name,
+          to_email: document.getElementById('email').value.trim(),
+          doctor: data.doctor,
+          date: new Date(data.appointment_date).toLocaleDateString('en-IN', {day:'numeric',month:'long',year:'numeric'}),
+          session: data.session,
+          phone: data.phone,
+          reply_to: "sushruthahospitalsrikakulam@gmail.com"
+        };
+        await emailjs.send("service_irrd1pk", "template_72yr0lq", templateParams);
+      } catch(e) { console.warn('EmailJS failed:', e); }
 
-      // 3. Show success
+      // 3. Send WhatsApp via Twilio (Optional)
+      try { await sendWhatsApp(data); } catch(e) { console.warn('WhatsApp failed'); }
+
+      // 4. Show success
       showModal(data);
       document.getElementById('bookingForm').reset();
     } catch(err) {
@@ -1144,7 +1203,7 @@
   }
 
   async function loadAppointments() {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('appointments')
       .select('*')
       .order('created_at', {ascending: false});
@@ -1182,6 +1241,80 @@
       <div class="admin-stat"><strong>${sangeetaCount}</strong><span>Dr. Sangeeta</span></div>
     `;
   }
+
+  // ── TRANSLATIONS ──
+  function setLanguage(lang) {
+    console.log("Sushruta i18n: Switching to", lang);
+    try {
+      localStorage.setItem('hospital_lang', lang);
+    } catch(e) { console.warn("Sushruta i18n: localStorage error", e); }
+    
+    updateUI(lang);
+    
+    // Update toggle buttons
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.remove('active');
+      btn.style.background = 'transparent';
+      btn.style.color = '#5A6480';
+    });
+
+    const activeBtn = lang === 'te' ? document.getElementById('lang-te') : document.getElementById('lang-en');
+    if (activeBtn) {
+      activeBtn.classList.add('active');
+      activeBtn.style.background = '#2C3E6B';
+      activeBtn.style.color = 'white';
+    }
+  }
+  window.setLanguage = setLanguage;
+
+  function updateUI(lang) {
+    // Look for translations object in various places
+    const dict = window.translations || (typeof translations !== 'undefined' ? translations : null);
+    
+    if (!dict) {
+      console.error("Sushruta i18n: Translations object not found!");
+      return;
+    }
+
+    console.log("Sushruta i18n: Updating UI elements...");
+    const elements = document.querySelectorAll('[data-i18n]');
+    elements.forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      
+      // Try target language, fallback to english
+      let text = (dict[lang] && dict[lang][key]) ? dict[lang][key] : (dict['en'] ? dict['en'][key] : null);
+      
+      if (text) {
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          el.placeholder = text;
+        } else if (el.tagName === 'SELECT') {
+           // Skip select itself
+        } else {
+          el.innerHTML = text;
+        }
+      }
+    });
+    
+    document.documentElement.lang = lang === 'te' ? 'te-IN' : 'en-IN';
+
+    // Apply Telugu font when switching
+    document.body.style.setProperty(
+      '--active-body-font',
+      lang === 'te' ? "'Hind Guntur', sans-serif" : "'Inter', system-ui, sans-serif"
+    );
+    document.body.style.setProperty(
+      '--active-display-font',
+      lang === 'te' ? "'Hind Guntur', sans-serif" : "'Libre Baskerville', Georgia, serif"
+    );
+  }
+
+  // Load saved lang
+  window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      const savedLang = localStorage.getItem('hospital_lang') || 'en';
+      setLanguage(savedLang);
+    }, 100);
+  });
 
   // Close modal on overlay click
   document.getElementById('successModal').addEventListener('click', function(e) {
