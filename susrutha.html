@@ -1068,7 +1068,11 @@
 
 <script>
   // ── CONFIG ──
-  const { SUPABASE_URL, SUPABASE_KEY, TWILIO_SID, TWILIO_AUTH, TWILIO_FROM, ADMIN_PASS } = window.HOSPITAL_CONFIG || {};
+  if (!window.HOSPITAL_CONFIG) {
+    console.error("Sushruta: Configuration file (config.js) not found. If you are developing locally, ensure config.js exists. If deployed, ensure Environment Variables and Build Command are set.");
+    window.HOSPITAL_CONFIG = {};
+  }
+  const { SUPABASE_URL, SUPABASE_KEY, TWILIO_SID, TWILIO_AUTH, TWILIO_FROM, ADMIN_PASS } = window.HOSPITAL_CONFIG;
 
 
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
